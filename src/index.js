@@ -4,50 +4,66 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {createStore} from 'redux'
+import {Provider} from 'react-redux'
 
 const reducers = (state, action) => {
   if (state === undefined) {
-    return 0
+    return { n: 0 }
   } else {
     let newState
     switch (action.type) {
       case 'add':
-      newState = state + action.payload
+        newState = { n: state.n + action.payload }
         return newState
       case 'minus':
-        newState = state - action.payload
+        newState = { n: state.n - action.payload }
+        return newState
+      case 'add1IfOdd':
+        if(state.n % 2 === 1) {
+          newState = { n: state.n + action.payload }
+        } else {
+          newState = state
+        }
         return newState
       default:
-        return 0
+        return { n: 0 }
     }
   }
 }
-var store = createStore(reducers)
-render()
-store.subscribe(render)
+const store = createStore(reducers)
 
-function onAdd1IfOdd() {
-  if(store.getState() % 2 === 1) {
-    store.dispatch({type: 'add', payload: 1})
-  }
-}
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+);
 
-function onAdd1After2Sec() {
-  setTimeout(() => {
-    store.dispatch({type: 'add', payload: 1})
-  }, 2000)
-}
+// render()
+// store.subscribe(render)
 
-function render() {
-  ReactDOM.render(<App value={store.getState()}
-    onAdd1={() => store.dispatch({type: 'add', payload: 1})}
-    onMinus1={() => store.dispatch({type: 'minus', payload: 1})}
-    onAdd1IfOdd={onAdd1IfOdd}
-    onAdd1After2Sec={onAdd1After2Sec}
-    />,
-    document.getElementById('root')
-  );
-}
+// function onAdd1IfOdd() {
+//   if(store.getState() % 2 === 1) {
+//     store.dispatch({type: 'add', payload: 1})
+//   }
+// }
+
+// function onAdd1After2Sec() {
+//   setTimeout(() => {
+//     store.dispatch({type: 'add', payload: 1})
+//   }, 2000)
+// }
+
+// function render() {
+//   ReactDOM.render(<App value={store.getState()}
+//     onAdd1={() => store.dispatch({type: 'add', payload: 1})}
+//     onMinus1={() => store.dispatch({type: 'minus', payload: 1})}
+//     onAdd1IfOdd={onAdd1IfOdd}
+//     onAdd1After2Sec={onAdd1After2Sec}
+//     />,
+//     document.getElementById('root')
+//   );
+// }
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

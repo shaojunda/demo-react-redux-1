@@ -1,34 +1,44 @@
 import React, { Component } from 'react';
-import { SIGHUP } from 'constants';
+import { connect } from 'react-redux'
 class App extends Component {
-  add1() {
-    this.props.onAdd1()
-  }
-
-  minus1() {
-    this.props.onMinus1()
-  }
-
-  add1IfOdd() {
-    this.props.onAdd1IfOdd()
-  }
-
-  add1After2Sec() {
-    this.props.onAdd1After2Sec()
-  }
   render() {
     return (
       <div>
-        你点击了 <span id="value">{this.props.value}</span> 次
+        你点击了 <span id="value">{this.props.n}</span> 次
         <div>
-          <button id="add1" onClick={this.add1.bind(this)} >+1</button>
-          <button id="minus1" onClick={this.minus1.bind(this)}>-1</button>
-          <button id="add1IfOdd" onClick={this.add1IfOdd.bind(this)}>如果是单数就 + 1</button>
-          <button id="add1After2Sec" onClick={() => {this.add1After2Sec()}}>两秒钟后 + 1</button>
+          <button id="add1" onClick={this.props.add1} >+1</button>
+          <button id="minus1" onClick={this.props.minus1}>-1</button>
+          <button id="add1IfOdd" onClick={this.props.add1IfOdd}>如果是单数就 + 1</button>
+          <button id="add1After2Sec" onClick={
+            () => {
+              setTimeout(() => {
+                this.props.add1()
+              }, 2000)
+            }}>两秒钟后 + 1</button>
         </div>
       </div>
     );
   }
 }
 
-export default App;
+// 返回这个组件需要获取的数据
+function mapStateToProps(state) {
+  return {
+    n: state.n
+  }
+}
+
+// 需要有哪些 Action ?
+const mapDispatchToProps = {
+  add1: () => {
+    return { type: 'add', payload: 1 }
+  },
+  minus1: () => {
+    return { type: 'minus', payload: 1 }
+  },
+  add1IfOdd: () => {
+    return { type: 'add1IfOdd', payload: 1 }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
