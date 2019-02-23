@@ -28,17 +28,25 @@ function mapStateToProps(state) {
   }
 }
 
-// 需要有哪些 Action ?
-const mapDispatchToProps = {
-  add1: () => {
-    return { type: 'add', payload: 1 }
-  },
-  minus1: () => {
-    return { type: 'minus', payload: 1 }
-  },
-  add1IfOdd: () => {
-    return { type: 'add1IfOdd', payload: 1 }
+function mapDispatchToProps(dispatch) {
+  return {
+    add1: () => dispatch({ type: 'add', payload: 1 }),
+    minus1: () => dispatch({ type: 'minus', payload: 1 }),
+    add1IfOdd: () => dispatch({ type: 'add1IfOdd', payload: 1 })
   }
 }
+
+// 需要有哪些 Action ?
+// const mapDispatchToProps = {
+//   add1: () => {
+//     return { type: 'add', payload: 1 }
+//   },
+//   minus1: () => {
+//     return { type: 'minus', payload: 1 }
+//   },
+//   add1IfOdd: () => {
+//     return { type: 'add1IfOdd', payload: 1 }
+//   }
+// }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
